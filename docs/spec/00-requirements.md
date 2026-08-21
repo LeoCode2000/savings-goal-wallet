@@ -21,11 +21,11 @@
 | NFR-06 | No real backend — mock / in-memory data is allowed |
 | NFR-07 | No real credentials, tokens or PII |
 | NFR-08 | Tests required in `app/` covering domain, use cases, Redux and the postMessage adapter |
-| NFR-09 | Native library must be a separate package (`libreria/`) — deferred, not in P0 scope |
+| NFR-09 | Native library must be a separate package (`libraries/native-implementations/`) and expose the dialog capability through an adapter |
 
 ## Constraints
 
 - Created with `@react-native-community/cli` — no Expo
-- Monorepo structure: `web/`, `libreria/`, `mobile/` (app), `docs/`
+- Monorepo structure: `app/`, `web/`, `libraries/native-implementations/`, `docs/`
 - `web/` does not require tests
 - Currency unit: Colombian Pesos (integers, no decimals) — **[ASSUMPTION]**

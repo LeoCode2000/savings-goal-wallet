@@ -22,7 +22,7 @@ Three explicit dependency layers (Domain → Application → Infrastructure/Pres
 ┌──────────────────▼──────────────────────┐
 │              Application                │
 │  GetGoals · MakeDeposit                 │
-│  HandleWebMessage (via hook)            │
+│  WebView message flow (via adapter/hook)│
 └──────────────────┬──────────────────────┘
                    │ uses interfaces from
 ┌──────────────────▼──────────────────────┐
@@ -85,8 +85,8 @@ No event bus, no pub-sub, no CQRS, no saga middleware. Each of these was conside
 |----------|---------|------|
 | Lean arch over full hexagonal | Faster to implement and explain | No formal port interfaces; depends on convention |
 | In-memory repo (singleton in hook) | Zero setup, instant tests | State resets between app restarts; not suitable for production |
-| Inline HTML in WebView | No build step, works on any platform | Sync script required when changing web UI |
-| `Alert.alert` for HU4 | Unblocks P0 delivery | Does not demonstrate custom native code |
+| Vite micro-app in WebView | Web UI can be developed and built independently | Requires the Vite server during local development |
+| TurboModule `showConfirmDialog` | Demonstrates reusable custom native code for HU4 | Native changes require codegen/build steps |
 | No `createAsyncThunk` | Redux stays as projection layer | Orchestration lives in hook — slightly less testable at integration level |
 
 ---
@@ -95,5 +95,5 @@ No event bus, no pub-sub, no CQRS, no saga middleware. Each of these was conside
 
 - Domain is 100% testable without React Native installed
 - Swapping the repository implementation is a one-line change in `useGoals`
-- `libreria/` (TurboModule) can be integrated by replacing the `onGoalCompleted` callback — no domain or application changes required
+- `libraries/native-implementations/` (TurboModule) is integrated through `NativeDialogAdapter`; the domain and application layers remain independent of the native module
 - The WebView contract is the only coupling between `web/` and `app/` — either side can change its internals freely

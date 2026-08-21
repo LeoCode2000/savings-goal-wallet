@@ -152,16 +152,16 @@ Tasks:
 
 ---
 
-## M10 — Native Library *(P1 — deferred)*
-**Goal:** `libreria/` package with TurboModule `showConfirmDialog`.
+## M10 — Native Library *(P1 — complete)*
+**Goal:** `libraries/native-implementations/` package with TurboModule `showConfirmDialog`.
 
 Tasks:
-- [ ] Scaffold with `react-native-builder-bob`
-- [ ] TurboModule spec + codegen
-- [ ] Kotlin `AlertDialog.Builder` implementation
-- [ ] iOS `UIAlertController` stub
-- [ ] Library tests
-- [ ] Consume in `app/` — replace `Alert.alert` fallback
+- [x] Scaffold with `react-native-builder-bob`
+- [x] TurboModule spec + codegen
+- [x] Kotlin `AlertDialog.Builder` implementation
+- [x] iOS `UIAlertController` implementation
+- [x] Library tests
+- [x] Consume in `app/` through `NativeDialogAdapter`
 
 Definition of Done: `showConfirmDialog` opens a native dialog on Android emulator.
-Commit: `feat(native): add showConfirmDialog TurboModule in libreria/`
+Commit: `feat(native): add showConfirmDialog TurboModule in libraries/native-implementations/`

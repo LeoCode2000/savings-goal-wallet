@@ -67,10 +67,10 @@ raw string
 
 ---
 
-## UC-04 · NotifyGoalCompleted *(P1 — deferred)*
+## UC-04 · NotifyGoalCompleted *(P1 — implemented)*
 
 | Field | Value |
 |-------|-------|
 | **Input** | `GoalCompletedEvent` |
 | **Output** | `void` |
-| **Notes** | Invoked as `onGoalCompleted` callback from UC-02. Currently implemented via `Alert.alert`. Native library (`libreria/`) would replace this with a real `AlertDialog` via TurboModule |
+| **Notes** | Invoked as `onGoalCompleted` callback from UC-02. `GoalDetailScreen` delegates the presentation to `NativeDialogAdapter`, which calls `showGoalCompletedDialog` from the `react-native-native-implementations` TurboModule |
