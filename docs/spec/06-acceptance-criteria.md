@@ -36,4 +36,4 @@
 | AC-4.1 | Native confirmation shown when `progress >= 100%` | `onGoalCompleted` callback invoked by `MakeDeposit` → `showGoalCompletedDialog` |
 | AC-4.2 | `GoalCompleted` event fires only on the completing deposit, not on subsequent deposits | `!goal.isCompleted` guard in `applyDeposit` |
 | AC-4.3 | Dialog uses native Android `AlertDialog` / iOS `UIAlertController` | `showConfirmDialog` TurboModule from `react-native-native-implementations`, called via `NativeDialogAdapter` |
-| AC-4.4 | A successful deposit that does not complete the goal shows a native success dialog instead | `showDepositSuccessDialog` — one dialog per deposit; `NativeDialogAdapter.test` |
+| AC-4.4 | A successful deposit that does not complete the goal shows a native success dialog instead | `NativeDialogAdapter.test` covers the dialog copy and callbacks; the one-dialog-per-deposit choice lives in `GoalDetailScreen` |
