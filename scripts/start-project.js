@@ -1,8 +1,12 @@
 const { spawn } = require('node:child_process');
+const { readFileSync } = require('node:fs');
+const path = require('node:path');
 const { createInterface } = require('node:readline/promises');
 const { stdin, stdout } = require('node:process');
 
 const WEBVIEW_PORT = 5173;
+const RED = '\x1b[31m';
+const RESET_COLOR = '\x1b[0m';
 const children = new Set();
 let stopping = false;
 
@@ -37,6 +41,12 @@ async function selectPlatform() {
   const readline = createInterface({ input: stdin, output: stdout });
 
   try {
+    const pattern = readFileSync(
+      path.resolve(__dirname, 'pattern.txt'),
+      'utf8'
+    );
+    console.log(`${RED}${pattern}${RESET_COLOR}`);
+
     while (true) {
       const answer = (
         await readline.question(
