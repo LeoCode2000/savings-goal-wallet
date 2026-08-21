@@ -8046,9 +8046,6 @@ react-native-mmkv@^4.3.2:
   resolved "https://registry.yarnpkg.com/react-native-mmkv/-/react-native-mmkv-4.3.2.tgz#522978d2330932c538cce36093040826870ccb49"
   integrity sha512-49OAyfkg0/TMWiWELZN6VuVQPZPhizwL4DTmp8b7B1md3dB/s3LH3mGfC3T+lp9W0y/rqxZMEnotLFTIbOAenQ==
 
-"react-native-native-implementations@file:libraries/native-implementations":
-  version "0.0.1"
-
 react-native-nitro-modules@^0.37.0:
   version "0.37.0"
   resolved "https://registry.yarnpkg.com/react-native-nitro-modules/-/react-native-nitro-modules-0.37.0.tgz#9ded1451fb517176bf388436c7c52dbed6b6e9b9"

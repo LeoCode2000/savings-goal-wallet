@@ -34,6 +34,7 @@
     ]
   },
   "scripts": {
+    "dev": "node scripts/start-project.js",
     "postinstall": "cd libraries/native-implementations && npx bob build",
     "test": "yarn workspace app test"
   }
