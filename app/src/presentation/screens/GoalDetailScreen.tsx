@@ -1,10 +1,14 @@
 import React, { useCallback, useRef } from 'react';
-import { Alert, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import WebView, { WebViewMessageEvent } from 'react-native-webview';
 import { GoalRecord } from '../../infrastructure/store/goalsSlice';
 import { NativeToWebMessage } from '../../infrastructure/adapters/WebViewMessageContract';
 import { parseWebViewMessage } from '../../infrastructure/adapters/WebViewMessageAdapter';
+import {
+  showDepositSuccessDialog,
+  showGoalCompletedDialog,
+} from '../../infrastructure/adapters/NativeDialogAdapter';
 import { useGoals } from '../hooks/useGoals';
 import { GoalCompletedEvent } from '../../domain/events/GoalCompleted';
 import { GOAL_DETAIL_HTML } from '../../web/goalDetailHtml';
@@ -69,26 +73,43 @@ export function GoalDetailScreen({ goal, onBack }: Props) {
           sendSessionInit();
           break;
 
-        case 'DEPOSIT_CONFIRMED':
+        case 'DEPOSIT_CONFIRMED': {
+          const completion: { event: GoalCompletedEvent | null } = { event: null };
           const updatedGoal = await deposit(
             msg.payload.goalId,
             msg.payload.amount,
             (completedEvent: GoalCompletedEvent) => {
-              // HU4: native confirmation when goal is completed
-              Alert.alert(
-                '🎉 ¡Meta completada!',
-                `Alcanzaste tu meta "${completedEvent.goalName}". ¡Felicitaciones!`,
-                [{ text: 'Aceptar' }],
-              );
+              completion.event = completedEvent;
             },
           );
-          if (updatedGoal) {
-            sendGoalUpdated(updatedGoal);
+          if (!updatedGoal) {
+            break;
+          }
+
+          // Refresh the Web UI first so progress is current behind the dialog
+          sendGoalUpdated(updatedGoal);
+
+          // HU4: native dialog from the TurboModule library
+          const completedEvent = completion.event;
+          if (completedEvent) {
+            showGoalCompletedDialog({
+              goalName: completedEvent.goalName,
+              finalAmount: completedEvent.finalAmount,
+              onSeeGoals: onBack,
+            });
+          } else {
+            showDepositSuccessDialog({
+              goalName: updatedGoal.name,
+              amount: msg.payload.amount,
+              accumulatedAmount: updatedGoal.accumulatedAmount,
+              onGoBack: onBack,
+            });
           }
           break;
+        }
       }
     },
-    [deposit, sendGoalUpdated, sendSessionInit],
+    [deposit, onBack, sendGoalUpdated, sendSessionInit],
   );
 
   return (

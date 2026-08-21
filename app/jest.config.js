@@ -8,5 +8,7 @@ module.exports = {
     'react-native-mmkv': '<rootDir>/__mocks__/react-native-mmkv.js',
     'react-native-webview': '<rootDir>/__mocks__/react-native-webview.js',
     'react-native-safe-area-context': '<rootDir>/__mocks__/react-native-safe-area-context.js',
+    'react-native-native-implementations':
+      '<rootDir>/__mocks__/react-native-native-implementations.js',
   },
 };

@@ -29,10 +29,11 @@
 | AC-3.3 | `GoalListScreen` reflects new accumulated amount without app reload | `useSelector(selectAllGoals)` re-renders on state change |
 | AC-3.4 | Invalid messages (bad JSON, unknown type, bad payload) are dropped silently | Adapter returns `err(ParseError)` — no crash |
 
-## HU4 — Goal Completed *(P1)*
+## HU4 — Goal Completed
 
 | ID | Criterion | Verification |
 |----|-----------|-------------|
-| AC-4.1 | Native confirmation shown when `progress >= 100%` | `onGoalCompleted` callback invoked by `MakeDeposit` |
+| AC-4.1 | Native confirmation shown when `progress >= 100%` | `onGoalCompleted` callback invoked by `MakeDeposit` → `showGoalCompletedDialog` |
 | AC-4.2 | `GoalCompleted` event fires only on the completing deposit, not on subsequent deposits | `!goal.isCompleted` guard in `applyDeposit` |
-| AC-4.3 | Dialog uses native Android `AlertDialog` (via `libreria/`) | TurboModule call — P1, currently `Alert.alert` fallback |
+| AC-4.3 | Dialog uses native Android `AlertDialog` / iOS `UIAlertController` | `showConfirmDialog` TurboModule from `react-native-native-implementations`, called via `NativeDialogAdapter` |
+| AC-4.4 | A successful deposit that does not complete the goal shows a native success dialog instead | `showDepositSuccessDialog` — one dialog per deposit; `NativeDialogAdapter.test` |
