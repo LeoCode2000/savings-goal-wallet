@@ -1,6 +1,6 @@
 {
   "name": "react-native-native-implementations",
-  "version": "0.1.0",
+  "version": "0.0.1",
   "description": "Native implementation for react native test app test app",
   "main": "./lib/module/index.js",
   "types": "./lib/typescript/src/index.d.ts",

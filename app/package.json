@@ -19,7 +19,8 @@
     "react-native-safe-area-context": "^5.5.2",
     "react-native-webview": "^14.0.1",
     "react-redux": "^9.3.0",
-    "redux-persist": "^6.0.0"
+    "redux-persist": "^6.0.0",
+    "react-native-native-implementations": "file:../libraries/native-implementations"
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",
