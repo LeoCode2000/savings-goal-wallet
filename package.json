@@ -5,6 +5,8 @@
   "workspaces": {
     "packages": ["app", "web", "libraries/*"],
     "nohoist": [
+      "**/react",
+      "**/react/**",
       "**/react-native",
       "**/react-native/**",
       "**/@react-native",
@@ -14,7 +16,15 @@
       "**/react-native-safe-area-context",
       "**/react-native-safe-area-context/**",
       "**/react-native-webview",
-      "**/react-native-webview/**"
+      "**/react-native-webview/**",
+      "**/react-redux",
+      "**/react-redux/**",
+      "**/metro",
+      "**/metro/**",
+      "**/metro-*",
+      "**/metro-*/**",
+      "**/jest-worker",
+      "**/jest-worker/**"
     ]
   },
   "scripts": {
