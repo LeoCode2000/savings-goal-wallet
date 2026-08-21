@@ -1,0 +1,110 @@
+import React, { useCallback, useRef } from 'react';
+import { Alert, SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import WebView, { WebViewMessageEvent } from 'react-native-webview';
+import { GoalRecord } from '../../infrastructure/store/goalsSlice';
+import { NativeToWebMessage } from '../../infrastructure/adapters/WebViewMessageContract';
+import { parseWebViewMessage } from '../../infrastructure/adapters/WebViewMessageAdapter';
+import { useGoals } from '../hooks/useGoals';
+import { GoalCompletedEvent } from '../../domain/events/GoalCompleted';
+import { GOAL_DETAIL_HTML } from '../../web/goalDetailHtml';
+
+type Props = {
+  goal: GoalRecord;
+  onBack: () => void;
+};
+
+export function GoalDetailScreen({ goal, onBack }: Props) {
+  const webViewRef = useRef<WebView>(null);
+  const { deposit } = useGoals();
+
+  // HU3: send session context to Web immediately after it signals ready
+  const sendSessionInit = useCallback(() => {
+    const message: NativeToWebMessage = {
+      type: 'SESSION_INIT',
+      payload: {
+        sessionId: `session-${Date.now()}`,
+        goalId: goal.id,
+        goalName: goal.name,
+        targetAmount: goal.targetAmount,
+        accumulatedAmount: goal.accumulatedAmount,
+        progressPercentage: goal.progressPercentage,
+        isCompleted: goal.isCompleted,
+        userInfo: { displayName: 'Usuario' },
+      },
+    };
+    webViewRef.current?.postMessage(JSON.stringify(message));
+  }, [goal]);
+
+  // HU3: handle incoming postMessage from Web
+  const handleMessage = useCallback(
+    async (event: WebViewMessageEvent) => {
+      const raw = event.nativeEvent.data;
+      const result = parseWebViewMessage(raw);
+
+      if (!result.ok) {
+        // Silent fail for unknown/malformed messages; real app would log to observability
+        return;
+      }
+
+      const msg = result.value;
+
+      switch (msg.type) {
+        case 'WEB_READY':
+          sendSessionInit();
+          break;
+
+        case 'DEPOSIT_CONFIRMED':
+          await deposit(
+            msg.payload.goalId,
+            msg.payload.amount,
+            (completedEvent: GoalCompletedEvent) => {
+              // HU4: native confirmation when goal is completed
+              Alert.alert(
+                '🎉 ¡Meta completada!',
+                `Alcanzaste tu meta "${completedEvent.goalName}". ¡Felicitaciones!`,
+                [{ text: 'Aceptar' }],
+              );
+            },
+          );
+          break;
+      }
+    },
+    [deposit, sendSessionInit],
+  );
+
+  return (
+    <SafeAreaView style={styles.container}>
+      <View style={styles.header}>
+        <TouchableOpacity onPress={onBack} style={styles.backButton}>
+          <Text style={styles.backText}>← Volver</Text>
+        </TouchableOpacity>
+        <Text style={styles.title} numberOfLines={1}>{goal.name}</Text>
+      </View>
+      <WebView
+        ref={webViewRef}
+        source={{ html: GOAL_DETAIL_HTML }}
+        onMessage={handleMessage}
+        style={styles.webView}
+        javaScriptEnabled
+        domStorageEnabled
+      />
+    </SafeAreaView>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: { flex: 1, backgroundColor: '#f5f7ff' },
+  header: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 16,
+    paddingVertical: 12,
+    borderBottomWidth: 1,
+    borderBottomColor: '#e2e8f0',
+    backgroundColor: '#fff',
+  },
+  backButton: { marginRight: 12 },
+  backText: { fontSize: 16, color: '#3b82f6' },
+  title: { fontSize: 18, fontWeight: '600', color: '#1a1a2e', flex: 1 },
+  webView: { flex: 1 },
+});
