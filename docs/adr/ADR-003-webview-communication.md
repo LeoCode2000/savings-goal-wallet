@@ -29,11 +29,14 @@ Without the adapter, validation and type-casting would scatter across components
 
 ## Trade-offs
 
-- Requires running `yarn sync:web` when the web app changes
-- `GOAL_UPDATED` message type is defined in the contract but not yet sent by the native side after deposits — a future improvement
+- The loading and deployment strategy is a separate decision documented in
+  [ADR-006](ADR-006-webview-dev-server.md).
+- The message unions are duplicated across the independent app and web
+  workspaces, so both copies must evolve together.
 
 ## Consequences
 
 - The entire parsing boundary is covered by 9 unit tests
 - The web contract can evolve independently of the app internals
-- Adding a new message type requires changes only in the contract file and adapter — no component changes
+- Adding a message type requires coordinated sender, receiver, contract and,
+  for Web-to-Native messages, adapter changes

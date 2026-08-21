@@ -34,7 +34,7 @@
     ]
   },
   "scripts": {
-    "sync:web": "yarn workspace savings-goal-web build && node scripts/sync-web.js",
+    "postinstall": "cd libraries/native-implementations && npx bob build",
     "test": "yarn workspace app test"
   }
 }

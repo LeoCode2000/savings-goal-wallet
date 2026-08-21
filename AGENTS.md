@@ -14,7 +14,6 @@ Yarn workspaces: `app`, `web`, `libraries/*`.
 | `web/` | `savings-goal-web` | Vite micro-app rendered inside the WebView |
 | `libraries/native-implementations/` | `react-native-native-implementations` | TurboModule package for native dialogs |
 | `docs/` | — | Specs, ADRs, development plan, AI usage log |
-| `scripts/sync-web.js` | — | Generates `app/src/web/goalDetailHtml.ts` from the web build |
 
 ## Commands
 
@@ -23,8 +22,8 @@ yarn workspace app test          # Jest — the primary gate
 yarn workspace app lint          # ESLint — the other gate
 yarn workspace app start         # Metro
 yarn workspace app android       # or: ios
-yarn sync:web                    # from root: build web/ and regenerate the inlined HTML
 yarn workspace savings-goal-web dev   # Vite dev server for the WebView UI
+adb reverse tcp:5173 tcp:5173    # expose Vite to Android
 ```
 
 After changing `libraries/native-implementations/src/`, rebuild the library — `app/` consumes the compiled `lib/module/`, not `src/`:
@@ -66,7 +65,6 @@ Non-negotiable rules:
 - Amounts are Colombian Pesos as integers, no decimals. Format for display as `` `$${value.toLocaleString('es-CO')}` ``.
 - User-facing copy is Spanish. Identifiers, comments, commit messages and docs are English.
 - Comments only explain non-obvious intent or constraints. Don't narrate what the code does.
-- `app/src/web/goalDetailHtml.ts` is auto-generated. Never edit it by hand.
 - Commit messages follow Conventional Commits, e.g. `feat(domain): ...`, `test: ...`, `docs(spec): ...`.
 
 ## Testing
@@ -91,7 +89,7 @@ Claims in the specs must match reality. Don't credit a test with coverage it doe
 
 ## Gotchas
 
-- Editing `web/src/` has no effect on the app until `yarn sync:web` regenerates the inlined HTML. This fails silently — the app keeps rendering the old bundle.
+- The WebView loads `http://localhost:5173` from `webViewConfig.ts`. Run the Vite dev server and `adb reverse tcp:5173 tcp:5173` before opening it on Android. Physical iOS devices need the Mac's LAN address instead of `localhost`.
 - Adding a method to the TurboModule spec requires native codegen plus a rebuild (`pod install` for iOS, Gradle for Android). Reloading the JS bundle is not enough. Changes confined to the library's TypeScript need only `prepare`.
 - `useGoals` holds a module-level singleton `InMemoryGoalRepository`. State resets on app restart, and it is shared across renders.
 - `selectAllGoals` must stay memoised with `createSelector`; returning a fresh array triggers react-redux v9 warnings and a non-zero exit code.

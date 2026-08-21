@@ -6,12 +6,10 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc -p tsconfig.json --noEmit && vite build",
-    "preview": "vite preview",
-    "sync": "yarn build && node ../scripts/sync-web.js"
+    "preview": "vite preview"
   },
   "devDependencies": {
     "typescript": "^5.4.0",
-    "vite": "^5.0.0",
-    "vite-plugin-singlefile": "^2.0.0"
+    "vite": "^5.0.0"
   }
 }

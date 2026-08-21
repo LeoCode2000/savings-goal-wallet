@@ -9,7 +9,7 @@
 | Show target amount | HU1 | UC-01 | `targetAmount > 0` | AC-1.2 | `SavingsGoal.test` | `Money` · `GoalCard` |
 | Show accumulated amount | HU1 | UC-01 | — | AC-1.2 | `SavingsGoal.test` · `MakeDeposit.test` | `GoalCard.accumulatedAmount` |
 | Show progress % | HU1 | UC-01 | `progress = acc/target` | AC-1.2 · AC-1.3 | `SavingsGoal.test` | `Progress` · `GoalCard` |
-| Open goal detail in WebView | HU2 | — | — | AC-2.1 | `App.test` (smoke) | `GoalDetailScreen` |
+| Open goal detail in WebView | HU2 | — | — | AC-2.1 | Manual device verification | `GoalDetailScreen` · `webViewConfig` · Vite dev server |
 | Display goal in web | HU2 | UC-03 HandleWebMessage | — | AC-2.2 | `WebViewMessageAdapter.test` | `SESSION_INIT` payload · `web/index.html` |
 | Deposit form | HU2 | — | — | AC-2.3–2.4 | — | `web/index.html` form |
 | postMessage DEPOSIT_CONFIRMED | HU2 | UC-03 | — | AC-2.4 | `WebViewMessageAdapter.test` | `WebViewMessageAdapter` |

@@ -9,17 +9,21 @@ The spec requires a native library (`libreria/`) as an independent package with 
 
 ## Decision
 
-**Option B — `showConfirmDialog({ title, message }): Promise<boolean>`** via TurboModule.
+**Option B —** `showConfirmDialog({ title, message }): Promise<boolean>` via TurboModule.
 
 ## Option Comparison
 
-| Criterion | A: DepositInput | B: ConfirmDialog | C: notifyGoalCompleted |
-|-----------|----------------|-----------------|----------------------|
-| Complexity | High | Medium | Low |
-| Demo value | Medium | **High** | Medium |
-| TurboModule fit | Weak (needs Fabric for views) | **Strong** | Strong |
-| Testable | Hard | **Easy** | Easy |
-| Time risk | High | Medium | Low |
+
+| Criterion       | A: DepositInput               | B: ConfirmDialog | C: notifyGoalCompleted |
+| --------------- | ----------------------------- | ---------------- | ---------------------- |
+| Complexity      | High                          | Medium           | Low                    |
+| Demo value      | Medium                        | **High**         | Medium                 |
+| TurboModule fit | Weak (needs Fabric for views) | **Strong**       | Strong                 |
+| Testable        | Hard                          | **Easy**         | Easy                   |
+| Time risk       | High                          | Medium           | Low                    |
+
+
+
 
 ## Why Option B
 
@@ -28,13 +32,15 @@ The spec requires a native library (`libreria/`) as an independent package with 
 - Directly satisfies HU4
 - The `onGoalCompleted` callback in `MakeDeposit` is already the integration point — swapping `Alert.alert` for the TurboModule call is a single-file change
 
+
+
 ## Why NOT Option A
 
 Implementing a custom native view (`<DepositInput />`) requires Fabric for RN 0.81+. The setup complexity and time risk outweigh the demo value.
 
 ## Why TurboModule over NativeModule Classic
 
-The candidate is applying for a Senior role. TurboModule (JSI, codegen) is the current React Native direction since 0.68. The added complexity is a feature of the demo, not a liability.
+As candidate I'm applying for a Senior role. TurboModule (JSI, codegen) is the current React Native direction since 0.68. The added complexity is a feature of the demo, not a liability.
 
 ## Current Fallback (P0)
 
@@ -45,3 +51,4 @@ The candidate is applying for a Senior role. TurboModule (JSI, codegen) is the c
 - P0 is unblocked — native library is not required for the core flow
 - Integration requires only changing the `onGoalCompleted` callback — no domain or application changes
 - `libreria/` must be scaffolded with `react-native-builder-bob` and linked via metro `extraNodeModules`
+

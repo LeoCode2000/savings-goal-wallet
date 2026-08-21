@@ -1,8 +1,15 @@
 import { defineConfig } from 'vite';
-import { viteSingleFile } from 'vite-plugin-singlefile';
 
 export default defineConfig({
-  plugins: [viteSingleFile()],
+  server: {
+    host: true,
+    port: 5173,
+    strictPort: true,
+  },
+  preview: {
+    port: 5173,
+    strictPort: true,
+  },
   build: {
     outDir: 'dist',
     emptyOutDir: true,

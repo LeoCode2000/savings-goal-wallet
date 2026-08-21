@@ -19,9 +19,6 @@ app/ios/Pods/
 app/ios/DerivedData/
 app/.gradle/
 
-# Generated artifacts — source is web/index.html, run yarn sync:web to regenerate
-# app/src/web/goalDetailHtml.ts
-
 # Metro
 app/.metro-health-check*
 

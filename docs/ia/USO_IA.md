@@ -16,11 +16,11 @@ GitHub Copilot (Claude Sonnet 4.6) dentro de VS Code.
 | `src/infrastructure/store/` — Redux slice, selectors, store | IA generó la estructura; el desarrollador decidió no usar `createAsyncThunk` |
 | `src/infrastructure/repositories/InMemoryGoalRepository.ts` | IA generó con seed data |
 | `src/presentation/` — screens, components, hook | IA generó el boilerplate; el desarrollador revisó el flujo de navegación |
-| `web/index.html` — micro-app WebView | IA generó la estructura HTML/CSS/JS; el desarrollador validó el contrato postMessage |
+| `web/` — micro-app Vite para el WebView | IA generó la estructura HTML/CSS/JS y migró la carga desde HTML generado al dev server; el desarrollador eligió eliminar el fallback inline |
 | `__tests__/` — todos los tests | IA generó los casos de prueba; el desarrollador verificó cobertura de edge cases |
 | `jest.config.js` — configuración de transforms y mocks | IA diagnosticó y resolvió problemas de ESM y módulos nativos |
-| `scripts/sync-web.js` — script de sincronización | IA generó |
 | `docs/` — toda la documentación | IA generó a partir de las decisiones tomadas durante el desarrollo |
+| Configuración local del WebView | IA centralizó host y puerto, configuró Vite y documentó `adb reverse`; el desarrollador definió que ambas plataformas fueran configurables |
 
 ---
 
@@ -44,6 +44,7 @@ GitHub Copilot (Claude Sonnet 4.6) dentro de VS Code.
 3. "Quiero aclarar que por ahora no hagamos la parte nativa, retoma omitiendo lo nativo"
 4. "Para la parte web debería ser una micro app dentro del monorepo no debería estar dentro del app"
 5. "No veo los archivos .md que se plantearon desde el inicio"
+6. "Servir el WebView desde el dev server de Vite"
 
 ---
 
@@ -66,6 +67,7 @@ GitHub Copilot (Claude Sonnet 4.6) dentro de VS Code.
 | `selectAllGoals` sin memoización causaba warning de react-redux v9 y exit code 1 | Envuelto con `createSelector` |
 | `SafeAreaView` de `react-native` deprecado | Migrado a `react-native-safe-area-context` |
 | `SESSION_INIT` no enviaba datos del goal | Extendido el tipo `NativeToWebMessage` y el payload |
+| El WebView consumía un bundle inline que podía quedar desactualizado | Sustituido por la URL configurable del dev server de Vite |
 
 ---
 
@@ -75,3 +77,4 @@ GitHub Copilot (Claude Sonnet 4.6) dentro de VS Code.
 2. **Priorización**: P0 completo y testado antes de tocar P1 (librería nativa)
 3. **Web como paquete independiente**: El desarrollador identificó que el HTML inline dentro de `app/` era arquitectónicamente incorrecto
 4. **IA como asistente**: Todas las decisiones arquitectónicas fueron revisadas y aprobadas por el desarrollador antes de generar código
+5. **Carga web en desarrollo**: El desarrollador eligió eliminar por completo el bundle inline y usar Vite mediante una URL configurable

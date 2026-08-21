@@ -1,6 +1,6 @@
 ---
 name: add-webview-message
-description: Adds or changes a postMessage message type in the bidirectional contract between the React Native app and the WebView micro-app, covering the duplicated type unions, adapter validation, both send and receive sites, tests and the sync:web regeneration step. Use when changing communication between app/ and web/, when the user mentions postMessage, WebView contract, SESSION_INIT, GOAL_UPDATED, DEPOSIT_CONFIRMED, WEB_READY, or when the web micro-app needs to send or receive new data.
+description: Adds or changes a postMessage message type in the bidirectional contract between the React Native app and the WebView micro-app, covering the duplicated type unions, adapter validation, both send and receive sites, tests and dev-server verification. Use when changing communication between app/ and web/, when the user mentions postMessage, WebView contract, SESSION_INIT, GOAL_UPDATED, DEPOSIT_CONFIRMED, WEB_READY, or when the web micro-app needs to send or receive new data.
 ---
 
 # Adding a WebView message type
@@ -24,7 +24,7 @@ Both must be edited together. TypeScript will not catch a mismatch — it surfac
 - [ ] 3. Receiver implemented
 - [ ] 4. Adapter validation (only for Web → Native)
 - [ ] 5. Adapter tests, including rejection cases
-- [ ] 6. yarn sync:web
+- [ ] 6. Dev-server integration verified
 - [ ] 7. docs/spec/03-webview-contract.md updated
 ```
 
@@ -68,17 +68,20 @@ Extend `app/__tests__/infrastructure/WebViewMessageAdapter.test.ts`. The adapter
 yarn workspace app test
 ```
 
-## Regenerating the WebView bundle
+## Verifying the WebView dev server
 
-`app/` does not load `web/` at runtime. It renders `GOAL_DETAIL_HTML` from `app/src/web/goalDetailHtml.ts`, an auto-generated single-file bundle. **Editing `web/src/` has no effect on the app until you regenerate it**, and nothing warns you:
+`app/` loads the Vite micro-app from the URL in
+`app/src/infrastructure/config/webViewConfig.ts`. Start the server before opening
+the detail screen:
 
 ```bash
-yarn sync:web   # from the monorepo root
+yarn workspace savings-goal-web dev
+adb reverse tcp:5173 tcp:5173
 ```
 
-Never hand-edit `app/src/web/goalDetailHtml.ts`. Commit the regenerated file alongside the `web/src/` change.
-
-To iterate on the web UI in a browser instead, run `yarn workspace savings-goal-web dev`.
+The `adb reverse` step is required for Android devices and emulators. The iOS
+simulator resolves `localhost` directly; physical iOS devices need the
+development machine's LAN address in `WEBVIEW_HOST`.
 
 ## Documentation
 

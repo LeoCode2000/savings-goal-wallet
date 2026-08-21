@@ -99,11 +99,12 @@ Commit: `feat(webview): add typed postMessage contract and validation adapter`
 Tasks:
 - [x] `web/index.html` — goal detail + deposit form
 - [x] `web/package.json`
-- [x] `scripts/sync-web.js` — generates `app/src/web/goalDetailHtml.ts`
-- [x] Root `package.json` with `sync:web` script
+- [x] Vite dev server on a fixed port
+- [x] `webViewConfig.ts` — central WebView host and port
 
-Definition of Done: `yarn sync:web` generates the artifact; web app renders in browser.
-Commit: `feat(web): extract micro-app to web/ package with sync script`
+Definition of Done: the web app renders in the browser and the native WebView
+loads it from the Vite server through `adb reverse`.
+Commit: `feat(web): serve WebView micro-app from Vite`
 
 ---
 
@@ -115,7 +116,7 @@ Tasks:
 - [x] `useGoals` hook (connects use cases ↔ Redux)
 - [x] `GoalCard` component
 - [x] `GoalListScreen`
-- [x] `GoalDetailScreen` (WebView host + bidirectional postMessage)
+- [x] `GoalDetailScreen` (Vite URL host + bidirectional postMessage)
 - [x] `App.tsx` (Provider + inline navigation)
 
 Definition of Done: App renders list; tapping opens WebView detail; deposit updates list.
@@ -146,7 +147,7 @@ Tasks:
 - [x] `docs/spec/00–08`
 - [x] `docs/architecture.md`
 - [x] `docs/development-plan.md`
-- [x] `docs/adr/ADR-001–005`
+- [x] `docs/adr/ADR-001–006`
 - [x] `docs/ia/USO_IA.md`
 
 ---

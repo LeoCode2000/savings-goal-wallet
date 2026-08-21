@@ -14,7 +14,7 @@
 
 | ID | Criterion | Verification |
 |----|-----------|-------------|
-| AC-2.1 | Detail screen renders a `WebView` | `GoalDetailScreen` mounts `WebView` with `source={{ html }}` |
+| AC-2.1 | Detail screen renders the Vite micro-app in a `WebView` | `GoalDetailScreen` mounts `WebView` with `source={{ uri: GOAL_DETAIL_URL }}` |
 | AC-2.2 | Web app displays goal name, amounts and progress | `SESSION_INIT` payload contains all fields; web renders them |
 | AC-2.3 | Deposit input accepts positive numbers only | Web validates `amount > 0` before sending |
 | AC-2.4 | Confirming deposit sends `DEPOSIT_CONFIRMED` via postMessage | `window.ReactNativeWebView.postMessage(...)` called |

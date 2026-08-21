@@ -4,6 +4,27 @@
 
 Communication is **bidirectional** and **exclusively via `postMessage`**. All messages are JSON strings. The Application layer never sees raw `event.nativeEvent.data` — the Adapter handles parsing and validation.
 
+## Loading
+
+`GoalDetailScreen` loads the Vite micro-app from the URL configured in
+`app/src/infrastructure/config/webViewConfig.ts`. The default development URL is
+`http://localhost:5173/`.
+
+Start the web server with:
+
+```bash
+yarn workspace savings-goal-web dev
+```
+
+Android devices and emulators reach the host through:
+
+```bash
+adb reverse tcp:5173 tcp:5173
+```
+
+The iOS simulator resolves `localhost` directly. A physical iOS device must use
+the development machine's LAN address as `WEBVIEW_HOST`.
+
 ---
 
 ## Native → Web

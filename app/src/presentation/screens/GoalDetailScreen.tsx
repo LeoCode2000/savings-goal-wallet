@@ -9,9 +9,9 @@ import {
   showDepositSuccessDialog,
   showGoalCompletedDialog,
 } from '../../infrastructure/adapters/NativeDialogAdapter';
+import { GOAL_DETAIL_URL } from '../../infrastructure/config/webViewConfig';
 import { useGoals } from '../hooks/useGoals';
 import { GoalCompletedEvent } from '../../domain/events/GoalCompleted';
-import { GOAL_DETAIL_HTML } from '../../web/goalDetailHtml';
 
 type Props = {
   goal: GoalRecord;
@@ -124,8 +124,16 @@ export function GoalDetailScreen({ goal, onBack }: Props) {
       </View>
       <WebView<object>
         ref={webViewRef}
-        source={{ html: GOAL_DETAIL_HTML }}
+        source={{ uri: GOAL_DETAIL_URL }}
         onMessage={handleMessage}
+        renderError={() => (
+          <View style={styles.errorContainer}>
+            <Text style={styles.errorText}>
+              No se pudo cargar el detalle. Verifica que el servidor de Vite esté
+              corriendo.
+            </Text>
+          </View>
+        )}
         style={styles.webView}
         javaScriptEnabled
         domStorageEnabled
@@ -149,4 +157,16 @@ const styles = StyleSheet.create({
   backText: { fontSize: 16, color: '#3b82f6' },
   title: { fontSize: 18, fontWeight: '600', color: '#1a1a2e', flex: 1 },
   webView: { flex: 1 },
+  errorContainer: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingHorizontal: 24,
+    backgroundColor: '#f5f7ff',
+  },
+  errorText: {
+    color: '#1a1a2e',
+    fontSize: 16,
+    textAlign: 'center',
+  },
 });
