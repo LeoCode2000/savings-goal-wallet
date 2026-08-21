@@ -2,7 +2,21 @@
   "name": "savings-goal-wallet",
   "version": "1.0.0",
   "private": true,
-  "workspaces": ["app", "web"],
+  "workspaces": {
+    "packages": ["app", "web", "libraries/*"],
+    "nohoist": [
+      "**/react-native",
+      "**/react-native/**",
+      "**/@react-native",
+      "**/@react-native/**",
+      "**/@react-native-community",
+      "**/@react-native-community/**",
+      "**/react-native-safe-area-context",
+      "**/react-native-safe-area-context/**",
+      "**/react-native-webview",
+      "**/react-native-webview/**"
+    ]
+  },
   "scripts": {
     "sync:web": "node scripts/sync-web.js",
     "test": "yarn workspace app test"
