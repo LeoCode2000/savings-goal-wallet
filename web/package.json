@@ -4,7 +4,14 @@
   "private": true,
   "description": "WebView micro-app — goal detail and deposit form",
   "scripts": {
-    "dev": "npx serve . -p 3000",
-    "sync": "node ../scripts/sync-web.js"
+    "dev": "vite",
+    "build": "tsc -p tsconfig.json --noEmit && vite build",
+    "preview": "vite preview",
+    "sync": "yarn build && node ../scripts/sync-web.js"
+  },
+  "devDependencies": {
+    "typescript": "^5.4.0",
+    "vite": "^5.0.0",
+    "vite-plugin-singlefile": "^2.0.0"
   }
 }

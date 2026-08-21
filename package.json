@@ -19,6 +19,12 @@
       "**/react-native-webview/**",
       "**/react-redux",
       "**/react-redux/**",
+      "**/redux-persist",
+      "**/redux-persist/**",
+      "**/react-native-mmkv",
+      "**/react-native-mmkv/**",
+      "**/react-native-nitro-modules",
+      "**/react-native-nitro-modules/**",
       "**/metro",
       "**/metro/**",
       "**/metro-*",
@@ -28,7 +34,7 @@
     ]
   },
   "scripts": {
-    "sync:web": "node scripts/sync-web.js",
+    "sync:web": "yarn workspace savings-goal-web build && node scripts/sync-web.js",
     "test": "yarn workspace app test"
   }
 }

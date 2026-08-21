@@ -6,7 +6,8 @@ const fs = require('fs');
 const path = require('path');
 
 const root = path.join(__dirname, '..');
-const htmlPath = path.join(root, 'web', 'index.html');
+// Read from the Vite build output (single-file bundle with inlined JS/CSS)
+const htmlPath = path.join(root, 'web', 'dist', 'index.html');
 const outPath = path.join(root, 'app', 'src', 'web', 'goalDetailHtml.ts');
 
 const html = fs.readFileSync(htmlPath, 'utf-8');

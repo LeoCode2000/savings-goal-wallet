@@ -1,5 +1,6 @@
 import React, { useCallback, useRef } from 'react';
-import { Alert, SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Alert, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import WebView, { WebViewMessageEvent } from 'react-native-webview';
 import { GoalRecord } from '../../infrastructure/store/goalsSlice';
 import { NativeToWebMessage } from '../../infrastructure/adapters/WebViewMessageContract';
@@ -16,6 +17,21 @@ type Props = {
 export function GoalDetailScreen({ goal, onBack }: Props) {
   const webViewRef = useRef<WebView>(null);
   const { deposit } = useGoals();
+
+  const sendGoalUpdated = useCallback((updatedGoal: GoalRecord) => {
+    const message: NativeToWebMessage = {
+      type: 'GOAL_UPDATED',
+      payload: {
+        goalId: updatedGoal.id,
+        goalName: updatedGoal.name,
+        targetAmount: updatedGoal.targetAmount,
+        accumulatedAmount: updatedGoal.accumulatedAmount,
+        progressPercentage: updatedGoal.progressPercentage,
+        isCompleted: updatedGoal.isCompleted,
+      },
+    };
+    webViewRef.current?.postMessage(JSON.stringify(message));
+  }, []);
 
   // HU3: send session context to Web immediately after it signals ready
   const sendSessionInit = useCallback(() => {
@@ -54,7 +70,7 @@ export function GoalDetailScreen({ goal, onBack }: Props) {
           break;
 
         case 'DEPOSIT_CONFIRMED':
-          await deposit(
+          const updatedGoal = await deposit(
             msg.payload.goalId,
             msg.payload.amount,
             (completedEvent: GoalCompletedEvent) => {
@@ -66,10 +82,13 @@ export function GoalDetailScreen({ goal, onBack }: Props) {
               );
             },
           );
+          if (updatedGoal) {
+            sendGoalUpdated(updatedGoal);
+          }
           break;
       }
     },
-    [deposit, sendSessionInit],
+    [deposit, sendGoalUpdated, sendSessionInit],
   );
 
   return (

@@ -2,6 +2,7 @@ import { useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { makeDeposit } from '../../application/useCases/MakeDeposit';
 import { getGoals } from '../../application/useCases/GetGoals';
+import { createSavingsGoal } from '../../domain/entities/SavingsGoal';
 import { GoalCompletedEvent } from '../../domain/events/GoalCompleted';
 import { AppDispatch } from '../../infrastructure/store/store';
 import {
@@ -30,9 +31,23 @@ export function useGoals() {
   const selectedGoalId = useSelector(selectSelectedGoalId);
 
   const loadGoals = useCallback(async () => {
+    if (goals.length > 0) {
+      repository.replaceAll(
+        goals.map(goal =>
+          createSavingsGoal({
+            id: goal.id,
+            name: goal.name,
+            targetAmount: goal.targetAmount,
+            accumulatedAmount: goal.accumulatedAmount,
+          }),
+        ),
+      );
+      return;
+    }
+
     const result = await getGoals(repository);
     dispatch(goalsLoaded(result.map(toGoalRecord)));
-  }, [dispatch]);
+  }, [dispatch, goals]);
 
   const deposit = useCallback(
     async (
@@ -46,7 +61,9 @@ export function useGoals() {
         { repository, onGoalCompleted },
       );
       if (result.ok) {
-        dispatch(depositConfirmed(toGoalRecord(result.value)));
+        const updatedGoal = toGoalRecord(result.value);
+        dispatch(depositConfirmed(updatedGoal));
+        return updatedGoal;
       } else {
         const error = result.error;
         const message =
@@ -56,6 +73,7 @@ export function useGoals() {
               ? `Goal not found: ${error.goalId}`
               : 'Unknown error';
         dispatch(depositFailed(message));
+        return undefined;
       }
     },
     [dispatch],

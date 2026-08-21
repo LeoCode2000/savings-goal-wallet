@@ -27,4 +27,8 @@ export class InMemoryGoalRepository implements GoalRepository {
   async save(goal: SavingsGoal): Promise<void> {
     this.store.set(goal.id, goal);
   }
+
+  replaceAll(goals: SavingsGoal[]): void {
+    this.store = new Map(goals.map(goal => [goal.id, goal]));
+  }
 }
