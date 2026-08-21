@@ -1,5 +1,5 @@
-import { SavingsGoal } from '../entities/SavingsGoal';
-import { DomainError, Result } from '../errors/DomainErrors';
+import { SavingsGoal } from '../../domain/entities/SavingsGoal';
+import { DomainError, Result } from '../../domain/errors/DomainErrors';
 
 export interface GoalRepository {
   getAll(): Promise<SavingsGoal[]>;

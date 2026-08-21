@@ -38,7 +38,7 @@ npx tsc           # library typecheck
 
 Use `npx` inside that package, not `yarn`. It pins Yarn 4 through `yarnPath` in its own `.yarnrc.yml`, but its `node_modules` was not installed by Berry, so any `yarn <script>` there fails with `Couldn't find the node_modules state file`. The root monorepo is Yarn 1.
 
-Do not use `npx tsc --noEmit` in `app/` as a pass/fail gate. It reports four pre-existing errors unrelated to any current change (module resolution in `GoalRepository.ts`, a `width: string` style in `GoalCard.tsx`, and a `WebView` JSX overload from duplicate `@types/react` in the monorepo). Lint and Jest are the gates.
+`npx tsc --noEmit` in `app/` is clean, as is the typecheck in `web/` and `libraries/native-implementations/`. Lint and Jest remain the gates, but a new type error means you introduced it.
 
 ## Architecture
 

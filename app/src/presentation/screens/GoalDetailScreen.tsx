@@ -19,7 +19,9 @@ type Props = {
 };
 
 export function GoalDetailScreen({ goal, onBack }: Props) {
-  const webViewRef = useRef<WebView>(null);
+  // react-native-webview@14 types the class as `WebView<P = undefined>` with props
+  // `WebViewProps & P`, which collapses to `never`. Instantiating P keeps props usable.
+  const webViewRef = useRef<WebView<object>>(null);
   const { deposit } = useGoals();
 
   const sendGoalUpdated = useCallback((updatedGoal: GoalRecord) => {
@@ -120,7 +122,7 @@ export function GoalDetailScreen({ goal, onBack }: Props) {
         </TouchableOpacity>
         <Text style={styles.title} numberOfLines={1}>{goal.name}</Text>
       </View>
-      <WebView
+      <WebView<object>
         ref={webViewRef}
         source={{ html: GOAL_DETAIL_HTML }}
         onMessage={handleMessage}

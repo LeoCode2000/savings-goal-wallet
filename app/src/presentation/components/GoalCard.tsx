@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { DimensionValue, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { GoalRecord } from '../../infrastructure/store/goalsSlice';
 
 type Props = {
@@ -8,7 +8,7 @@ type Props = {
 };
 
 export function GoalCard({ goal, onPress }: Props) {
-  const filled = `${goal.progressPercentage}%`;
+  const filled: DimensionValue = `${goal.progressPercentage}%`;
   return (
     <TouchableOpacity style={styles.card} onPress={() => onPress(goal.id)} activeOpacity={0.8}>
       <View style={styles.header}>
