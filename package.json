@@ -1,0 +1,10 @@
+{
+  "name": "savings-goal-wallet",
+  "version": "1.0.0",
+  "private": true,
+  "workspaces": ["app", "web"],
+  "scripts": {
+    "sync:web": "node scripts/sync-web.js",
+    "test": "yarn workspace app test"
+  }
+}
