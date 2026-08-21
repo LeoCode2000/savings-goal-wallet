@@ -7,6 +7,7 @@ const { stdin, stdout } = require('node:process');
 const WEBVIEW_PORT = 5173;
 const RED = '\x1b[31m';
 const RESET_COLOR = '\x1b[0m';
+const YARN_COMMAND = process.platform === 'win32' ? 'yarn.cmd' : 'yarn';
 const children = new Set();
 let stopping = false;
 
@@ -14,6 +15,7 @@ function start(command, args) {
   const child = spawn(command, args, {
     cwd: process.cwd(),
     stdio: 'inherit',
+    shell: process.platform === 'win32' && command.endsWith('.cmd'),
   });
 
   children.add(child);
@@ -78,7 +80,9 @@ function stop(signal = 'SIGTERM') {
 
   stopping = true;
   for (const child of children) {
-    child.kill(signal);
+    if (child.pid !== undefined && child.exitCode === null && !child.killed) {
+      child.kill(signal);
+    }
   }
 }
 
@@ -95,7 +99,7 @@ async function main() {
   }
 
   console.log('Iniciando el servidor web...');
-  const web = start('yarn', ['workspace', 'savings-goal-web', 'dev']);
+  const web = start(YARN_COMMAND, ['workspace', 'savings-goal-web', 'dev']);
 
   web.once('error', (error) => {
     console.error(`No se pudo iniciar la web: ${error.message}`);
@@ -112,7 +116,7 @@ async function main() {
   });
 
   console.log(`Iniciando la app en ${platform === 'android' ? 'Android' : 'iOS'}...`);
-  const app = start('yarn', ['workspace', 'app', platform]);
+  const app = start(YARN_COMMAND, ['workspace', 'app', platform]);
 
   app.once('error', (error) => {
     console.error(`No se pudo iniciar la app: ${error.message}`);
